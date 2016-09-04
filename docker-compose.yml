@@ -4,6 +4,8 @@ elasticsearch:
   ports:
     - "9200:9200"
     - "9300:9300"
+  volumes:
+    - $PWD/esdata:/usr/share/elasticsearch/data
 
 logstash:
   build: logstash/
@@ -22,3 +24,9 @@ kibana:
     - "5601:5601"
   links:
     - elasticsearch
+nginx:
+  build: nginx/
+  ports:
+    - "443:443"
+  links:
+    - kibana
