@@ -7,7 +7,7 @@ services:
       - "9200:9200"
       - "9300:9300"
     volumes:
-      - esdata:/usr/share/elasticsearch/data
+      - /var/lib/docker/volumes/esdata:/usr/share/elasticsearch/data
   logstash:
     build: logstash/
     command: logstash -f /etc/logstash/conf.d/logstash.conf
@@ -34,13 +34,13 @@ services:
     env_file:
       - 'env.influxdb'
     volumes:
-      - influxdb:/var/lib/influxdb
+      - /var/lib/docker/volumes/influxdb:/var/lib/influxdb
   grafana:
     image: grafana/grafana:latest
     ports:
       - "3000:3000"
     volumes:
-      - grafana:/var/lib/grafana
+      - /var/lib/docker/volumes/grafana:/var/lib/grafana
     links:
       - influxdb
   nginx:
@@ -50,7 +50,3 @@ services:
     links:
       - kibana
       - grafana
-volumes:
-  esdata: {}
-  influxdb: {}
-  grafana: {}
