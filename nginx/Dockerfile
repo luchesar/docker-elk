@@ -14,6 +14,7 @@ RUN echo "Sofia/Bulgaria" > /etc/timezone \
 
 # Add main NGINX config
 COPY kibana.conf /etc/nginx/conf.d/
+COPY grafana.conf /etc/nginx/conf.d/
 COPY ssl/* /etc/nginx/ssl/
 
 # Add DH params (generated with openssl dhparam -out dhparams.pem 2048)
