@@ -7,7 +7,7 @@ services:
       - "9200:9200"
       - "9300:9300"
     volumes:
-      - /var/lib/docker/volumes/esdata:/usr/share/elasticsearch/data
+      - /srv/elasticsearch:/usr/share/elasticsearch/data
   logstash:
     build: logstash/
     command: logstash -f /etc/logstash/conf.d/logstash.conf
@@ -34,15 +34,31 @@ services:
     env_file:
       - 'env.influxdb'
     volumes:
-      - /var/lib/docker/volumes/influxdb:/var/lib/influxdb
+      - /srv/influxdb:/var/lib/influxdb
   grafana:
     image: grafana/grafana:latest
     ports:
       - "3000:3000"
     volumes:
-      - /var/lib/docker/volumes/grafana:/var/lib/grafana
+      - /srv/grafana:/var/lib/grafana
     links:
       - influxdb
+  gitlab:
+    image: 'gitlab/gitlab-ce:latest'
+    restart: always
+    hostname: 'localhost'
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'http://80.72.68.14'
+        gitlab_rails['gitlab_shell_ssh_port'] = 2201
+    ports:
+      - '3001:80'
+      - '4431:443'
+      - '2201:22'
+    volumes:
+      - '/srv/gitlab/config:/etc/gitlab'
+      - '/srv/gitlab/logs:/var/log/gitlab'
+      - '/srv/gitlab/data:/var/opt/gitlab'
   nginx:
     build: nginx/
     ports:
@@ -50,3 +66,4 @@ services:
     links:
       - kibana
       - grafana
+      - gitlab
