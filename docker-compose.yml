@@ -3,9 +3,6 @@ services:
   elasticsearch:
     image: elasticsearch:latest
     command: elasticsearch -Des.network.host=0.0.0.0
-    ports:
-      - "9200:9200"
-      - "9300:9300"
     volumes:
       - /srv/elasticsearch:/usr/share/elasticsearch/data
   logstash:
@@ -13,32 +10,22 @@ services:
     command: logstash -f /etc/logstash/conf.d/logstash.conf
     volumes:
       - ./logstash/config:/etc/logstash/conf.d
-    ports:
-      - "5000:5000"
     links:
       - elasticsearch
   kibana:
     build: kibana/
     volumes:
       - ./kibana/config/:/opt/kibana/config/
-    ports:
-      - "5601:5601"
     links:
       - elasticsearch
   influxdb:
     image: influxdb:latest
-    ports:
-      - "8083:8083"
-      - "8086:8086"
-      - "8090:8090"
     env_file:
       - 'env.influxdb'
     volumes:
       - /srv/influxdb:/var/lib/influxdb
   grafana:
     image: grafana/grafana:latest
-    ports:
-      - "3000:3000"
     volumes:
       - /srv/grafana:/var/lib/grafana
     links:
@@ -47,14 +34,12 @@ services:
     image: 'gitlab/gitlab-ce:latest'
     restart: always
     hostname: 'localhost'
+    ports:
+      - "2201:22"
     environment:
       GITLAB_OMNIBUS_CONFIG: |
         external_url 'https://80.72.68.14'
         gitlab_rails['gitlab_shell_ssh_port'] = 2201
-    ports:
-      - '3001:80'
-      - '4431:443'
-      - '2201:22'
     volumes:
       - '/srv/gitlab/config:/etc/gitlab'
       - '/srv/gitlab/logs:/var/log/gitlab'
