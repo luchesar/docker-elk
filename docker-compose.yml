@@ -59,6 +59,10 @@ services:
       - '/srv/gitlab/config:/etc/gitlab'
       - '/srv/gitlab/logs:/var/log/gitlab'
       - '/srv/gitlab/data:/var/opt/gitlab'
+      - './nginx/ssl/nginx.crt:/etc/gitlab/ssl/localhost.crt'
+      - './nginx/ssl/nginx.key:/etc/gitlab/ssl/localhost.key'
+      - './nginx/ssl/nginx.crt:/etc/gitlab/ssl/80.72.68.14.crt'
+      - './nginx/ssl/nginx.key:/etc/gitlab/ssl/80.72.68.14.key'
   nginx:
     build: nginx/
     ports:

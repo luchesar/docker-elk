@@ -17,7 +17,7 @@ COPY *.conf /etc/nginx/conf.d/
 COPY ssl/* /etc/nginx/ssl/
 
 # Add DH params (generated with openssl dhparam -out dhparams.pem 2048)
-#COPY ssl/dhparams.pem /etc/ssl/private/
+COPY ssl/dhparam.pem /etc/ssl/private/
 
 # Add www certificates
 #COPY ssl/ssl-ca-certs-startssl.pem /etc/ssl/certs/  
