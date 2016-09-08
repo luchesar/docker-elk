@@ -1,11 +1,13 @@
 version: '2'
 services:
   elasticsearch:
+    container_name: elasticsearch
     image: elasticsearch:latest
     command: elasticsearch -Des.network.host=0.0.0.0
     volumes:
       - /srv/elasticsearch:/usr/share/elasticsearch/data
   logstash:
+    container_name: logstash
     build: logstash/
     command: logstash -f /etc/logstash/conf.d/logstash.conf
     volumes:
@@ -13,24 +15,28 @@ services:
     links:
       - elasticsearch
   kibana:
+    container_name: kibana
     build: kibana/
     volumes:
       - ./kibana/config/:/opt/kibana/config/
     links:
       - elasticsearch
   influxdb:
+    container_name: influxdb
     image: influxdb:latest
     env_file:
       - 'env.influxdb'
     volumes:
       - /srv/influxdb:/var/lib/influxdb
   grafana:
+    container_name: grafana
     image: grafana/grafana:latest
     volumes:
       - /srv/grafana:/var/lib/grafana
     links:
       - influxdb
   gitlab:
+    container_name: gitlab
     image: 'gitlab/gitlab-ce:latest'
     restart: always
     hostname: 'localhost'
@@ -49,6 +55,7 @@ services:
       - './nginx/ssl/nginx.crt:/etc/gitlab/ssl/80.72.68.14.crt'
       - './nginx/ssl/nginx.key:/etc/gitlab/ssl/80.72.68.14.key'
   nginx:
+    container_name: nginx
     build: nginx/
     ports:
       - "443:443"
