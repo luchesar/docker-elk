@@ -10,6 +10,8 @@ services:
     container_name: logstash
     build: logstash/
     command: logstash -f /etc/logstash/conf.d/logstash.conf
+    ports:
+      - "5000:5000"
     volumes:
       - ./logstash/config:/etc/logstash/conf.d
     links:
@@ -26,6 +28,10 @@ services:
     image: influxdb:latest
     env_file:
       - 'env.influxdb'
+    ports:
+      - "8083:8083"
+      - "8086:8086"
+      - "8090:8090"
     volumes:
       - /srv/influxdb:/var/lib/influxdb
   grafana:
