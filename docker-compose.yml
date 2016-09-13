@@ -41,6 +41,13 @@ services:
       - /srv/grafana:/var/lib/grafana
     links:
       - influxdb
+  registry:
+    container_name: registry
+    image: registry
+    ports:
+      - "5011:5000"
+    volumes:
+      - '/srv/registy:/var/lib/registry'
   gitlab:
     container_name: gitlab
     build: gitlab/
@@ -54,7 +61,7 @@ services:
         registry_external_ur 'https://registry.gitlab.bgoner.com'
         gitlab_rails['gitlab_shell_ssh_port'] = 2201
     extra_hosts:
-     - "gitlab.bgoner.com:127.0.0.1"
+      - "gitlab.bgoner.com:127.0.0.1"
     volumes:
       - '/var/run/docker.sock:/var/run/docker.sock'
       - '/srv/gitlab/config:/etc/gitlab'
@@ -78,6 +85,7 @@ services:
       - './gitlab/gitlab.crt:/etc/gitlab-runner/certs/80.72.68.14.crt'
     links:
       - "gitlab:gitlab.bgoner.com"
+      - "registry:registry.bgoner.com"
   nginx:
     container_name: nginx
     build: nginx/
@@ -87,3 +95,4 @@ services:
       - kibana
       - grafana
       - gitlab
+      - registry
