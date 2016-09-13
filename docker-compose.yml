@@ -50,17 +50,34 @@ services:
       - "2201:22"
     environment:
       GITLAB_OMNIBUS_CONFIG: |
-        external_url 'https://80.72.68.14'
+        external_url 'https://gitlab.bgoner.com'
+        registry_external_ur 'https://registry.gitlab.bgoner.com'
         gitlab_rails['gitlab_shell_ssh_port'] = 2201
+    extra_hosts:
+     - "gitlab.bgoner.com:127.0.0.1"
     volumes:
       - '/var/run/docker.sock:/var/run/docker.sock'
       - '/srv/gitlab/config:/etc/gitlab'
       - '/srv/gitlab/logs:/var/log/gitlab'
       - '/srv/gitlab/data:/var/opt/gitlab'
-      - './nginx/ssl/nginx.crt:/etc/gitlab/ssl/localhost.crt'
-      - './nginx/ssl/nginx.key:/etc/gitlab/ssl/localhost.key'
-      - './nginx/ssl/nginx.crt:/etc/gitlab/ssl/80.72.68.14.crt'
-      - './nginx/ssl/nginx.key:/etc/gitlab/ssl/80.72.68.14.key'
+      - './gitlab/gitlab.crt:/etc/gitlab/ssl/localhost.crt'
+      - './gitlab/gitlab.key:/etc/gitlab/ssl/localhost.key'
+      - './gitlab/gitlab.crt:/etc/gitlab/ssl/80.72.68.14.crt'
+      - './gitlab/gitlab.key:/etc/gitlab/ssl/80.72.68.14.key'
+      - './gitlab/gitlab.crt:/etc/gitlab/ssl/gitlab.bgoner.com.crt'
+      - './gitlab/gitlab.key:/etc/gitlab/ssl/gitlab.bgoner.com.key'
+      - './gitlab/gitlab.crt:/etc/gitlab/ssl/registry.gitlab.bgoner.com.crt'
+      - './gitlab/gitlab.key:/etc/gitlab/ssl/registry.gitlab.bgoner.com.key'
+  gitlab_runner:
+    container_name: gitlab_runner
+    build: gitlab_runner
+    restart: always
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock'
+      - './gitlab/gitlab.crt:/etc/gitlab-runner/certs/gitlab.bgoner.com.crt'
+      - './gitlab/gitlab.crt:/etc/gitlab-runner/certs/80.72.68.14.crt'
+    links:
+      - "gitlab:gitlab.bgoner.com"
   nginx:
     container_name: nginx
     build: nginx/
