@@ -91,6 +91,9 @@ services:
     links:
       - "gitlab:gitlab.bgoner.com"
       - "registry:registry.bgoner.com"
+    cpu_shares: 80
+    mem_limit: 3381477945
+    memswap_limit: 0
   nginx:
     container_name: nginx
     build: nginx/
