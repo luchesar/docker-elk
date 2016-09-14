@@ -86,6 +86,7 @@ services:
       - '$HOME/.ivy2:/root/.ivy2'
       - '/srv/gitlab_runner/builds:/builds'
       - '/var/run/docker.sock:/var/run/docker.sock'
+      - './gitlab_runner/config.toml:/etc/gitlab-runner/config.toml'
       - './gitlab/gitlab.crt:/etc/gitlab-runner/certs/gitlab.bgoner.com.crt'
       - './gitlab/gitlab.crt:/etc/gitlab-runner/certs/80.72.68.14.crt'
     links:
