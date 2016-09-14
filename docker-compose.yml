@@ -79,7 +79,12 @@ services:
     container_name: gitlab_runner
     build: gitlab_runner
     restart: always
+    environment:
+      - DOCKER_HOST_GITLAB_RUNNER=/srv/gitlab_runner/
+      - DOCKER_HOST_HOME=$HOME
     volumes:
+      - '$HOME/.ivy2:/root/.ivy2'
+      - '/srv/gitlab_runner/builds:/builds'
       - '/var/run/docker.sock:/var/run/docker.sock'
       - './gitlab/gitlab.crt:/etc/gitlab-runner/certs/gitlab.bgoner.com.crt'
       - './gitlab/gitlab.crt:/etc/gitlab-runner/certs/80.72.68.14.crt'
